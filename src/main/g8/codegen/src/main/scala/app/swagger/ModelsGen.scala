@@ -14,29 +14,29 @@ import app._
 
 object ModelsGen {
   def gen(swagger: Swagger, apiVersion: String, f: File): Unit = {
-    println(s"- Starting Models Generator for ${f.pathAsString}")
-    val modelsFolder = file"shared/src/main/scala/shared/models/swagger/${f.nameWithoutExtension}/$apiVersion"
+    println(s"- Starting Models Generator for $dollar${f.pathAsString}")
+    val modelsFolder = file"shared/src/main/scala/shared/models/swagger/$dollar${f.nameWithoutExtension}/$dollar$apiVersion"
 
     swagger.getDefinitions.toVector.foreach {
       case (name, model) =>
         val modelName = name.toUpperCamelCase
 
         val propertiesAsScala: Vector[String] = model.getProperties.toVector.map { e =>
-          s"${e._1.toCamelCase}: ${property2Scala(e._2)}"
+          s"$dollar${e._1.toCamelCase}: $dollar${property2Scala(e._2)}"
         }
 
-        val modelAsCaseClass = s"case class $modelName(${propertiesAsScala.mkString(", ")})"
+        val modelAsCaseClass = s"case class $dollar$modelName($dollar${propertiesAsScala.mkString(", ")})"
 
-        val targetFile = modelsFolder./(s"$modelName.scala")
+        val targetFile = modelsFolder./(s"$dollar$modelName.scala")
         if (targetFile.notExists) {
           // Create Template
           val template =
             s"""
-               |package shared.models.swagger.${f.nameWithoutExtension}.$apiVersion
+               |package shared.models.swagger.$dollar${f.nameWithoutExtension}.$dollar$apiVersion
                |
             |import java.time._
                |
-            |$modelAsCaseClass
+            |$dollar$modelAsCaseClass
           """.trim.stripMargin
 
           targetFile.createIfNotExists(createParents = true).overwrite(template)

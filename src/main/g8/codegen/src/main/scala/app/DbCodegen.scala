@@ -30,12 +30,12 @@ object DbCodegen extends App {
     val short = dbConfig._1
     val name = short.capitalize
 
-    val url = config.getString(s"slick.dbs.$short.db.url")
-    val driver = config.getString(s"slick.dbs.$short.db.driver")
-    val user = config.getString(s"slick.dbs.$short.db.user")
-    val password = config.getString(s"slick.dbs.$short.db.password")
+    val url = config.getString(s"slick.dbs.$dollar$short.db.url")
+    val driver = config.getString(s"slick.dbs.$dollar$short.db.driver")
+    val user = config.getString(s"slick.dbs.$dollar$short.db.user")
+    val password = config.getString(s"slick.dbs.$dollar$short.db.password")
 
-    val excluded = List("schema_version") ++ config.getStringList(s"slick.dbs.$short.db.exclude")
+    val excluded = List("schema_version") ++ config.getStringList(s"slick.dbs.$dollar$short.db.exclude")
 
     val profile = CustomizedPgDriver
     val db = CustomizedPgDriver.api.Database.forURL(url, driver = driver, user = user, password = password)
@@ -45,7 +45,7 @@ object DbCodegen extends App {
       val c = DriverManager.getConnection(url.reverse.dropWhile(_ != '/').reverse, user, password)
       val statement = c.createStatement()
       try {
-        statement.executeUpdate(s"DROP DATABASE ${url.reverse.takeWhile(_ != '/').reverse};")
+        statement.executeUpdate(s"DROP DATABASE $dollar${url.reverse.takeWhile(_ != '/').reverse};")
       } catch {
         case scala.util.control.NonFatal(e) => ()
       } finally {
@@ -58,7 +58,7 @@ object DbCodegen extends App {
     val c = DriverManager.getConnection(url.reverse.dropWhile(_ != '/').reverse, user, password)
     val statement = c.createStatement()
     try {
-      statement.executeUpdate(s"CREATE DATABASE ${url.reverse.takeWhile(_ != '/').reverse};")
+      statement.executeUpdate(s"CREATE DATABASE $dollar${url.reverse.takeWhile(_ != '/').reverse};")
     } catch {
       case scala.util.control.NonFatal(e) =>
     } finally {
@@ -70,7 +70,7 @@ object DbCodegen extends App {
     val flyway = new Flyway
     flyway.setDataSource(url, user, password)
     flyway.setValidateOnMigrate(false) // Creates problems with windows machines
-    flyway.setLocations(s"filesystem:server/conf/db/migration/$short")
+    flyway.setLocations(s"filesystem:server/conf/db/migration/$dollar$short")
     flyway.migrate()
 
     println("- Starting codegeneration task..")
@@ -89,7 +89,7 @@ object DbCodegen extends App {
                                 "dbschema/src/main/scala",
                                 "models.slick",
                                 name,
-                                s"$name.scala"))
+                                s"$dollar$name.scala"))
         .recover {
           case e: Throwable => e.printStackTrace()
         },
@@ -97,7 +97,7 @@ object DbCodegen extends App {
     )
 
     println("- Parsing generated slick-model")
-    val createdFile = file"dbschema/src/main/scala/models/slick/$name.scala"
+    val createdFile = file"dbschema/src/main/scala/models/slick/$dollar$name.scala"
     val modelSource = createdFile.contentAsString
     val sharedCaseClasses =
       modelSource.split("\n").map(_.trim).filter(_.startsWith("case class"))
@@ -110,32 +110,32 @@ object DbCodegen extends App {
 
     // Creating Shared Models
     val path =
-      file"shared/src/main/scala/shared/models/slick/${name.toCamelCase}"
+      file"shared/src/main/scala/shared/models/slick/$dollar${name.toCamelCase}"
     sharedCaseClasses.foreach { caseClass =>
       val caseClassStat = caseClass.parse[Stat].get
       val modelName = caseClassStat.collect {
-        case q"case class $tname (...$paramss)" =>
+        case q"case class $dollar$tname (...$dollar$paramss)" =>
           tname.value
       }.head
 
-      val targetFile = path./(s"$modelName.scala")
+      val targetFile = path./(s"$dollar$modelName.scala")
 
       if (targetFile.notExists) {
-        println(s"-- Creating ${targetFile.path.toString}")
+        println(s"-- Creating $dollar${targetFile.path.toString}")
 
         val template =
           s"""
-               |package shared.models.slick.${name.toCamelCase}
+               |package shared.models.slick.$dollar${name.toCamelCase}
                |
                |import shared.utils.Codecs._
                |import java.time._
                |
-               |$caseClass
+               |$dollar$caseClass
           """.trim.stripMargin
 
         targetFile.createIfNotExists(createParents = true).overwrite(template)
       } else {
-        println(s"-- Loading ${targetFile.path.toString}")
+        println(s"-- Loading $dollar${targetFile.path.toString}")
 
         val source = targetFile.contentAsString.parse[Source].get
         val tree = CaseClassMetaHelper.updateOrInsert(source, caseClassStat)

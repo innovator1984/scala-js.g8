@@ -6,8 +6,8 @@
     <script src="@{
         def bundleUrl(projectName: String): Option[String] = {
             val name = projectName.toLowerCase
-            Seq(s"$name-opt-bundle.js", s"$name-fastopt-bundle.js")
-                    .find(name => getClass.getResource(s"/public/$name") != null)
+            Seq(s"$dollar$name-opt-bundle.js", s"$dollar$name-fastopt-bundle.js")
+                    .find(name => getClass.getResource(s"/public/$dollar$name") != null)
                     .map(controllers.routes.Assets.versioned(_).url)
         }
 

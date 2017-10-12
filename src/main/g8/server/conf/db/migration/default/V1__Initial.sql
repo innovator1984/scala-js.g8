@@ -18,6 +18,6 @@ CREATE TABLE "UserToUserGroup" (
   "groupName" VARCHAR NOT NULL REFERENCES "UserGroup"
 );
 
-INSERT INTO "User" (email, created, password) VALUES ('test@test.de', NOW(), '$2a$10$yrRTolAEYuyD82z.TPhUseNHSAGN9fLJ2Jj1H4nZ8/31SyPGs3DEG'); -- pw == testpw
+INSERT INTO "User" (email, created, password) VALUES ('test@test.de', NOW(), '$dollar$2a$dollar$10$dollar$yrRTolAEYuyD82z.TPhUseNHSAGN9fLJ2Jj1H4nZ8/31SyPGs3DEG'); -- pw == testpw
 INSERT INTO "UserGroup" VALUES ('admin');
 INSERT INTO "UserToUserGroup" VALUES (1, 'admin');

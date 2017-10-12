@@ -17,7 +17,7 @@ object HomeScreen extends HtmlTags with Codecs {
 
   case class State()
 
-  class Backend($ : BackendScope[Props, State]) {
+  class Backend($dollar$ : BackendScope[Props, State]) {
 
     def mounted() = Callback {
       AjaxClient[WiredApi].now().call().foreach {

@@ -11,7 +11,7 @@ object LayoutComponent extends HtmlTags {
 
   case class State()
 
-  class Backend($ : BackendScope[Props, State]) {
+  class Backend($dollar$ : BackendScope[Props, State]) {
 
     def mounted() = Callback.empty
 

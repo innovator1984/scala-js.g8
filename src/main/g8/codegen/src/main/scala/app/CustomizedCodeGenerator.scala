@@ -36,16 +36,16 @@ class CustomizedCodeGenerator(val model: m.Model) extends SourceCodeGenerator(mo
           .map(
             c =>
               c.default
-                .map(v => s"${c.name}: ${c.exposedType} = $v")
+                .map(v => s"$dollar${c.name}: $dollar${c.exposedType} = $dollar$v")
                 .getOrElse(
-                  s"${c.name}: ${c.exposedType}"
+                  s"$dollar${c.name}: $dollar${c.exposedType}"
               ))
           .mkString(", ")
 
         val prns = parents.map(" with " + _).mkString("")
 
         s"""
-           |case class $name($args) $prns
+           |case class $dollar$name($dollar$args) $dollar$prns
              """.stripMargin
       }
     }
@@ -80,7 +80,7 @@ class CustomizedCodeGenerator(val model: m.Model) extends SourceCodeGenerator(mo
       }
 
       override def code =
-        s"""val $name: Rep[$actualType] = column[$actualType]("${model.name}"${options
+        s"""val $dollar$name: Rep[$dollar$actualType] = column[$dollar$actualType]("$dollar${model.name}"$dollar${options
           .filter(_ => !rawType.startsWith("List"))
           .map(", " + _)
           .mkString("")})"""
@@ -91,23 +91,23 @@ class CustomizedCodeGenerator(val model: m.Model) extends SourceCodeGenerator(mo
 
   override def packageCode(profile: String, pkg: String, container: String, parentType: Option[String]): String = {
     s"""
-       |package $pkg
+       |package $dollar$pkg
        |
        |import bay.driver.CustomizedPgDriver
        |import java.time._
        |import io.circe._
-       |import shared.models.slick.${ExtString(container).toCamelCase}._
+       |import shared.models.slick.$dollar${ExtString(container).toCamelCase}._
        |
-       |object $container extends {
+       |object $dollar$container extends {
        |  val profile = bay.driver.CustomizedPgDriver
-       |} with $container
+       |} with $dollar$container
        |
-       |trait $container${parentType.map(t => s" extends $t").getOrElse("")} {
+       |trait $dollar$container$dollar${parentType.map(t => s" extends $dollar$t").getOrElse("")} {
        |
        |  val profile: bay.driver.CustomizedPgDriver
        |  import profile.api._
        |
-       |  ${indent(code.replace("$CONTAINER", container))}
+       |  $dollar${indent(code.replace("$dollar$CONTAINER", container))}
        |
        |}
      """.stripMargin

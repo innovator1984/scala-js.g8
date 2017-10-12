@@ -45,7 +45,7 @@ class UserDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) 
       case Some(user) if loginForm.password.isBcrypted(user.password) =>
         db.run(users.filter(_.id === user.id).map(_.lastLogin).update(OffsetDateTime.now.asOption)) map { n =>
           if (n > 0) {
-            Logger.info(s"${user.email} logged in")
+            Logger.info(s"$dollar${user.email} logged in")
             user.id
           } else None
         }

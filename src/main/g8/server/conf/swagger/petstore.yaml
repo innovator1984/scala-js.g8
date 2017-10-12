@@ -38,7 +38,7 @@ paths:
           description: Pet object that needs to be added to the store
           required: false
           schema:
-            $ref: "#/definitions/Pet"
+            $dollar$ref: "#/definitions/Pet"
       responses:
         "405":
           description: Invalid input
@@ -64,7 +64,7 @@ paths:
           description: Pet object that needs to be added to the store
           required: false
           schema:
-            $ref: "#/definitions/Pet"
+            $dollar$ref: "#/definitions/Pet"
       responses:
         "405":
           description: Validation exception
@@ -101,7 +101,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Pet"
+              $dollar$ref: "#/definitions/Pet"
         "400":
           description: Invalid status value
       security:
@@ -133,7 +133,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Pet"
+              $dollar$ref: "#/definitions/Pet"
         "400":
           description: Invalid tag value
       security:
@@ -163,7 +163,7 @@ paths:
         "200":
           description: successful operation
           schema:
-            $ref: "#/definitions/Pet"
+            $dollar$ref: "#/definitions/Pet"
         "400":
           description: Invalid ID supplied
       security:
@@ -249,12 +249,12 @@ paths:
           description: order placed for purchasing the pet
           required: false
           schema:
-            $ref: "#/definitions/Order"
+            $dollar$ref: "#/definitions/Order"
       responses:
         "200":
           description: successful operation
           schema:
-            $ref: "#/definitions/Order"
+            $dollar$ref: "#/definitions/Order"
         "400":
           description: Invalid Order
   /stores/order/{orderId}:
@@ -279,7 +279,7 @@ paths:
         "200":
           description: successful operation
           schema:
-            $ref: "#/definitions/Order"
+            $dollar$ref: "#/definitions/Order"
         "400":
           description: Invalid ID supplied
     delete:
@@ -318,7 +318,7 @@ paths:
           description: Created user object
           required: false
           schema:
-            $ref: "#/definitions/User"
+            $dollar$ref: "#/definitions/User"
       responses:
         default:
           description: successful operation
@@ -340,7 +340,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/User"
+              $dollar$ref: "#/definitions/User"
       responses:
         default:
           description: successful operation
@@ -362,7 +362,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/User"
+              $dollar$ref: "#/definitions/User"
       responses:
         default:
           description: successful operation
@@ -429,7 +429,7 @@ paths:
         "200":
           description: successful operation
           schema:
-            $ref: "#/definitions/User"
+            $dollar$ref: "#/definitions/User"
         "400":
           description: Invalid username supplied
     put:
@@ -452,7 +452,7 @@ paths:
           description: Updated user object
           required: false
           schema:
-            $ref: "#/definitions/User"
+            $dollar$ref: "#/definitions/User"
       responses:
         "404":
           description: User not found
@@ -531,7 +531,7 @@ definitions:
         type: integer
         format: int64
       category:
-        $ref: "#/definitions/Category"
+        $dollar$ref: "#/definitions/Category"
       name:
         type: string
         example: doggie
@@ -542,7 +542,7 @@ definitions:
       tags:
         type: array
         items:
-          $ref: "#/definitions/Tag"
+          $dollar$ref: "#/definitions/Tag"
       status:
         type: string
         description: pet status in the store
